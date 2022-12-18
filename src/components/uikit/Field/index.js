@@ -2,9 +2,9 @@ import { Box } from '../Box';
 import { Input } from '../Input';
 import { Label } from '../Label';
 
-export const Field = ({ name, type, label, ...props }) => (
+export const Field = ({ name, type, label, disabled, ...props }) => (
   <Box {...props} flexbox="column">
     <Label htmlFor={name}>{label}</Label>
-    <Input type={type} name={name} id={name} />
+    <Input type={type} name={name} id={name} disabled={disabled} />
   </Box>
 );
