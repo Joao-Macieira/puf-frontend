@@ -20,7 +20,7 @@ export const Signup = () => {
       setIsLoading(true);
       await axios.post('http://localhost:9901/users', values);
     } catch {
-      console.log('error');
+      //
     } finally {
       setValues({});
       setIsLoading(false);
