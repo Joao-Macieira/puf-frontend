@@ -10,10 +10,29 @@ const ErrorMessage = styled(Box)`
   font-size: ${th.size(2)}px;
 `;
 
-export const Field = ({ name, type, label, error, disabled, ...props }) => (
+export const Field = ({
+  name,
+  type,
+  label,
+  value,
+  error,
+  disabled,
+  onChange,
+  onBlur,
+  ...props
+}) => (
   <Box {...props} flexbox="column">
     <Label htmlFor={name}>{label}</Label>
-    <Input type={type} name={name} id={name} disabled={disabled} />
+    <Input
+      type={type}
+      name={name}
+      id={name}
+      value={value}
+      disabled={disabled}
+      onChange={onChange}
+      onBlur={onBlur}
+      hasError={!!error}
+    />
     {error && <ErrorMessage>{error}</ErrorMessage>}
   </Box>
 );
