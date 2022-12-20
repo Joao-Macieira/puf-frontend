@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
-import { background, color, th } from './styled';
+import { background, font } from './styled';
 
 export const GlobalStyle = createGlobalStyle`
   html, body {
@@ -14,10 +14,9 @@ export const GlobalStyle = createGlobalStyle`
 
   body {
     ${background}
-    ${color}
+    ${font}
 
     margin: 0;
-    font-size: ${th.size(3)};
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
