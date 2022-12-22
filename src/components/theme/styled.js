@@ -1,15 +1,24 @@
 /* eslint-disable valid-typeof */
+const addIfExists = (prop, value) => (prop ? value : '');
+
 export const background = props =>
-  `background: ${props.theme.colors[props.bg] ?? ''};`;
+  addIfExists(props.bg, `background: ${props.theme.colors[props.bg]};`);
 
 export const font = props => {
-  const color = `color: ${props.theme.colors[props.color] ?? props.color};`;
-  const size =
-    Object.prototype.hasOwnProperty.call(props, 'fontSize') &&
-    `font-size: ${props.theme.fontSizes[props.fontSize]}px`;
+  const color = addIfExists(
+    props.color,
+    `color: ${props.theme.colors[props.color] ?? props.color};`
+  );
+  const size = addIfExists(
+    Object.prototype.hasOwnProperty.call(props, 'fontSize'),
+    `font-size: ${props.theme.fontSizes[props.fontSize]}px;`
+  );
+
   return `
-    ${color ?? ''}
-    ${size ?? ''}
+    ${color}
+    ${size}
+    ${addIfExists(props.textAlign, `text-align: ${props.textAlign};`)}
+    ${addIfExists(props.fontWeight, `font-weight: ${props.fontWeight};`)}
   `;
 };
 
@@ -49,11 +58,11 @@ export const flexbox = props => {
   const alignItems = props.alignItems || (props.center && 'center');
 
   return `
-    ${(props.flex && `flex: ${props.flex};`) || ''}
-    ${(props.flexbox && 'display: flex;') || ''}
-    ${(direction && `flex-direction: ${direction};`) || ''}
-    ${(justifyContent && `justify-content: ${justifyContent};`) || ''}
-    ${(alignItems && `align-items: ${alignItems};`) || ''}
+    ${addIfExists(props.flex, `flex: ${props.flex};`)}
+    ${addIfExists(props.flexbox, 'display: flex;')}
+    ${addIfExists(direction, `flex-direction: ${direction};`)}
+    ${addIfExists(justifyContent, `justify-content: ${justifyContent};`)}
+    ${addIfExists(alignItems, `align-items: ${alignItems};`)}
   `;
 };
 

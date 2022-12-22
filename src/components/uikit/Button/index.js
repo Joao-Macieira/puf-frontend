@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 
-import { th } from '~/components/theme/styled';
+import { th, margin } from '~/components/theme/styled';
 
 const StyledButton = styled('button')`
   background: ${th.color('white')};
@@ -11,6 +11,8 @@ const StyledButton = styled('button')`
   font-size: inherit;
   outline: none;
   cursor: pointer;
+
+  ${margin}
 
   ${({ disabled }) =>
     disabled &&
@@ -68,8 +70,8 @@ export const StyledSpinner = styled.div`
   z-index: 3;
 `;
 
-export const Button = ({ disabled, loading, children }) => (
-  <StyledButton disabled={disabled || loading}>
+export const Button = ({ disabled, loading, children, ...props }) => (
+  <StyledButton disabled={disabled || loading} {...props}>
     {loading ? <StyledSpinner size={16} /> : children}
   </StyledButton>
 );
