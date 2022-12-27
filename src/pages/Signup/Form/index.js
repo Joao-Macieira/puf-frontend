@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import axios from 'axios';
 import { useFormik } from 'formik';
 import styled from 'styled-components';
@@ -18,7 +17,7 @@ const validationSchema = yup.object().shape({
 });
 
 export const Form = () => {
-  const onSubmit = async () => {
+  const onSubmit = async values => {
     try {
       await axios.post('http://localhost:9901/users', values);
     } catch (error) {
