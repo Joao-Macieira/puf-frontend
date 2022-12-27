@@ -1,3 +1,4 @@
+import axios from 'axios';
 import styled from 'styled-components';
 
 import { Box, font, Logo } from '~/components';
@@ -15,7 +16,19 @@ const CenteredBox = ({ children, ...props }) => (
   </Box>
 );
 
-export const Login = () => {
+export const Login = ({ onSuccess }) => {
+  const onSubmit = async values => {
+    try {
+      const response = await axios.get('http://localhost:9901/login', {
+        auth: values,
+      });
+
+      onSuccess(response.data);
+    } catch (error) {
+      console.error({ error });
+    }
+  };
+
   return (
     <Box flexbox flex={1}>
       <CenteredBox bg="black">
@@ -30,7 +43,7 @@ export const Login = () => {
         <Title fontSize={7} textAlign="center">
           Login
         </Title>
-        <Form />
+        <Form onSubmit={onSubmit} />
       </CenteredBox>
     </Box>
   );
