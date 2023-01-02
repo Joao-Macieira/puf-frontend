@@ -5,7 +5,7 @@ export const Dashboard = () => {
 
   return (
     <div>
-      Olá {auth.name}
+      Olá {auth.user.name}
       <button type="button" onClick={logout}>
         Sair
       </button>

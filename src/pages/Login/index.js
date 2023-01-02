@@ -1,5 +1,6 @@
 import axios from 'axios';
 import styled from 'styled-components';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import { Box, font, Logo } from '~/components';
 import { useAuth } from '~/components/modules';
@@ -19,7 +20,12 @@ const CenteredBox = ({ children, ...props }) => (
 );
 
 export const Login = () => {
+  const history = useHistory();
+  const location = useLocation();
+
   const [, { login: setAuth }] = useAuth();
+
+  const { from } = location.state || { from: { pathname: '/' } };
 
   const onSubmit = async values => {
     try {
@@ -28,6 +34,7 @@ export const Login = () => {
       });
 
       setAuth(response.data);
+      history.replace(from);
     } catch (error) {
       console.error({ error });
     }
