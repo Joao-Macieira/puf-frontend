@@ -2,6 +2,8 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 import { Box, font, Logo } from '~/components';
+import { useAuth } from '~/components/modules';
+
 import { Form } from './Form';
 
 import { ReactComponent as Ilustra } from './ilustra.svg';
@@ -16,14 +18,16 @@ const CenteredBox = ({ children, ...props }) => (
   </Box>
 );
 
-export const Login = ({ onSuccess }) => {
+export const Login = () => {
+  const [, { login: setAuth }] = useAuth();
+
   const onSubmit = async values => {
     try {
       const response = await axios.get('http://localhost:9901/login', {
         auth: values,
       });
 
-      onSuccess(response.data);
+      setAuth(response.data);
     } catch (error) {
       console.error({ error });
     }
