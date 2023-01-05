@@ -36,6 +36,48 @@ test('should show login form', () => {
   expect(signupLink).toHaveAttribute('href', '/cadastro');
 });
 
+test('should not login user when submit form with incorrect credentials', async () => {
+  const dataCredentials = {
+    email: 'jm@email',
+    password: '123456',
+  };
+
+  axios.get.mockImplementation(() =>
+    Promise.resolve({
+      data: responseData,
+    })
+  );
+
+  render(
+    <Theme>
+      <AuthProvider>
+        <Router>
+          <Login />
+        </Router>
+      </AuthProvider>
+    </Theme>
+  );
+  const emailInput = screen.getByLabelText('E-mail');
+  await userEvent.type(emailInput, dataCredentials.email);
+
+  const passwordInput = screen.getByLabelText('Senha');
+
+  expect(emailInput.value).toBe(dataCredentials.email);
+  expect(passwordInput.value).toBe('');
+
+  const formButton = screen.getByRole('button');
+  await userEvent.click(formButton);
+
+  const emailError = screen.getByText('E-mail inválido');
+  const passwordError = screen.getByText('Digite uma senha');
+
+  expect(formButton).toBeDisabled();
+
+  expect(emailError).toBeInTheDocument();
+  expect(passwordError).toBeInTheDocument();
+  await waitFor(() => expect(axios.get).not.toHaveBeenCalled());
+});
+
 test('should login user when submit form with correct credentials', async () => {
   const dataCredentials = {
     email: 'jm@email.com',
