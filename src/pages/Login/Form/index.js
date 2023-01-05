@@ -41,6 +41,7 @@ export const Form = ({ onSubmit }) => {
         name="username"
         type="text"
         label="E-mail"
+        placeholder="Digite o seu e-mail"
         value={values.username}
         mb={3}
         disabled={isSubmitting}
@@ -52,6 +53,7 @@ export const Form = ({ onSubmit }) => {
         name="password"
         type="password"
         label="Senha"
+        placeholder="Digite a sua senha"
         value={values.password}
         mb={3}
         disabled={isSubmitting}
@@ -60,7 +62,7 @@ export const Form = ({ onSubmit }) => {
         onBlur={handleBlur}
       />
       <Box flexbox="column" center>
-        <Button loading={isSubmitting} mb={4}>
+        <Button loading={isSubmitting} mb={4} type="submit">
           Entrar
         </Button>
         <Box fontSize={1} color="gray">

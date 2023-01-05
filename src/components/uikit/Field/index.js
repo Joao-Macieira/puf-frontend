@@ -19,6 +19,7 @@ export const Field = ({
   disabled,
   onChange,
   onBlur,
+  placeholder,
   ...props
 }) => (
   <Box {...props} flexbox="column">
@@ -28,6 +29,7 @@ export const Field = ({
       name={name}
       id={name}
       value={value}
+      placeholder={placeholder}
       disabled={disabled}
       onChange={onChange}
       onBlur={onBlur}
