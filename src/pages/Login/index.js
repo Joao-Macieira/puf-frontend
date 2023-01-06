@@ -28,6 +28,7 @@ export const Login = () => {
   const { from } = location.state || { from: { pathname: '/' } };
 
   const onSubmit = async values => {
+    console.log('aqui');
     try {
       const response = await axios.get('http://localhost:9901/login', {
         auth: values,

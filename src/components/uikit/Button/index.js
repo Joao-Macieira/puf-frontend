@@ -70,8 +70,10 @@ export const StyledSpinner = styled.div`
   z-index: 3;
 `;
 
-export const Button = ({ disabled, loading, children, type, ...props }) => (
-  <StyledButton type={type} disabled={disabled || loading} {...props}>
-    {loading ? <StyledSpinner size={16} /> : children}
-  </StyledButton>
-);
+export const Button = ({ disabled, loading, children, type, ...props }) => {
+  return (
+    <StyledButton type={type} disabled={disabled || loading} {...props}>
+      {loading ? <StyledSpinner size={16} /> : children}
+    </StyledButton>
+  );
+};

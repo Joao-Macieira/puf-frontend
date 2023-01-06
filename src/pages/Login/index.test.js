@@ -11,122 +11,150 @@ import { Login } from '.';
 
 jest.mock('axios');
 
-test('should show login form', () => {
-  render(
-    <Theme>
-      <AuthProvider>
-        <Router>
-          <Login />
-        </Router>
-      </AuthProvider>
-    </Theme>
-  );
-  const emailInput = screen.getByLabelText('E-mail');
-  const passwordInput = screen.getByLabelText('Senha');
-  const formButton = screen.getByRole('button');
-  const signupLink = screen.getByRole('link');
+describe('Login test', () => {
+  test('should show login form', () => {
+    render(
+      <Theme>
+        <AuthProvider>
+          <Router>
+            <Login />
+          </Router>
+        </AuthProvider>
+      </Theme>
+    );
+    const emailInput = screen.getByLabelText('E-mail');
+    const passwordInput = screen.getByLabelText('Senha');
+    const formButton = screen.getByRole('button');
+    const signupLink = screen.getByRole('link');
 
-  expect(emailInput).toBeInTheDocument();
-  expect(passwordInput).toBeInTheDocument();
-  expect(formButton).toBeInTheDocument();
-  expect(signupLink).toBeInTheDocument();
+    expect(emailInput).toBeInTheDocument();
+    expect(passwordInput).toBeInTheDocument();
+    expect(formButton).toBeInTheDocument();
+    expect(signupLink).toBeInTheDocument();
 
-  expect(formButton.textContent).toEqual('Entrar');
-  expect(signupLink.textContent).toEqual('Cadastre-se!');
-  expect(signupLink).toHaveAttribute('href', '/cadastro');
-});
+    expect(formButton.textContent).toEqual('Entrar');
+    expect(signupLink.textContent).toEqual('Cadastre-se!');
+    expect(signupLink).toHaveAttribute('href', '/cadastro');
+  });
 
-test('should not login user when submit form with incorrect credentials', async () => {
-  const dataCredentials = {
-    email: 'jm@email',
-    password: '123456',
-  };
+  test('should show error when validate an especific fields blur', async () => {
+    const emailValue = 'abc';
 
-  axios.get.mockImplementation(() =>
-    Promise.resolve({
-      data: responseData,
-    })
-  );
+    render(
+      <Theme>
+        <AuthProvider>
+          <Router>
+            <Login />
+          </Router>
+        </AuthProvider>
+      </Theme>
+    );
 
-  render(
-    <Theme>
-      <AuthProvider>
-        <Router>
-          <Login />
-        </Router>
-      </AuthProvider>
-    </Theme>
-  );
-  const emailInput = screen.getByLabelText('E-mail');
-  await userEvent.type(emailInput, dataCredentials.email);
+    const emailInput = screen.getByLabelText('E-mail');
+    const passwordInput = screen.getByLabelText('Senha');
 
-  const passwordInput = screen.getByLabelText('Senha');
+    await userEvent.type(emailInput, emailValue);
+    await userEvent.click(passwordInput);
 
-  expect(emailInput.value).toBe(dataCredentials.email);
-  expect(passwordInput.value).toBe('');
+    const emailError = screen.getByText('E-mail inválido');
+    expect(emailError).toBeInTheDocument();
 
-  const formButton = screen.getByRole('button');
-  await userEvent.click(formButton);
+    await userEvent.click(emailInput);
 
-  const emailError = screen.getByText('E-mail inválido');
-  const passwordError = screen.getByText('Digite uma senha');
+    const passwordError = screen.getByText('Digite uma senha');
+    expect(passwordError).toBeInTheDocument();
 
-  expect(formButton).toBeDisabled();
+    const formButton = screen.getByRole('button');
+    expect(formButton).toBeDisabled();
+  });
 
-  expect(emailError).toBeInTheDocument();
-  expect(passwordError).toBeInTheDocument();
-  await waitFor(() => expect(axios.get).not.toHaveBeenCalled());
-});
+  test('should not login user when submit form with incorrect credentials', async () => {
+    const dataCredentials = {
+      email: 'jm@email',
+      password: '123456',
+    };
 
-test('should login user when submit form with correct credentials', async () => {
-  const dataCredentials = {
-    email: 'jm@email.com',
-    password: '123456',
-  };
+    axios.get.mockImplementation(() =>
+      Promise.resolve({
+        data: responseData,
+      })
+    );
 
-  const responseData = {
-    user: {
-      id: 1,
-      name: 'João',
-      email: dataCredentials.email,
-    },
-    token: '123',
-  };
+    render(
+      <Theme>
+        <AuthProvider>
+          <Router>
+            <Login />
+          </Router>
+        </AuthProvider>
+      </Theme>
+    );
+    const emailInput = screen.getByLabelText('E-mail');
+    await userEvent.type(emailInput, dataCredentials.email);
 
-  axios.get.mockImplementation(() =>
-    Promise.resolve({
-      data: responseData,
-    })
-  );
+    expect(emailInput.value).toBe(dataCredentials.email);
 
-  render(
-    <Theme>
-      <AuthProvider>
-        <Router>
-          <Login />
-        </Router>
-      </AuthProvider>
-    </Theme>
-  );
-  const emailInput = screen.getByLabelText('E-mail');
-  await userEvent.type(emailInput, dataCredentials.email);
+    const formButton = screen.getByRole('button');
+    await userEvent.click(formButton);
 
-  const passwordInput = screen.getByLabelText('Senha');
-  await userEvent.type(passwordInput, dataCredentials.password);
+    const emailError = screen.getByText('E-mail inválido');
 
-  expect(emailInput.value).toBe(dataCredentials.email);
-  expect(passwordInput.value).toBe(dataCredentials.password);
+    expect(formButton).toBeDisabled();
 
-  const formButton = screen.getByRole('button');
-  await userEvent.click(formButton);
+    expect(emailError).toBeInTheDocument();
+    await waitFor(() => expect(axios.get).not.toHaveBeenCalled());
+  });
 
-  expect(formButton).toBeDisabled();
-  await waitFor(() =>
-    expect(axios.get).toHaveBeenCalledWith('http://localhost:9901/login', {
-      auth: {
-        password: dataCredentials.password,
-        username: dataCredentials.email,
+  test('should login user when submit form with correct credentials', async () => {
+    const dataCredentials = {
+      email: 'jm@email.com',
+      password: '123456',
+    };
+
+    const responseData = {
+      user: {
+        id: 1,
+        name: 'João',
+        email: dataCredentials.email,
       },
-    })
-  );
+      token: '123',
+    };
+
+    axios.get.mockImplementation(() =>
+      Promise.resolve({
+        data: responseData,
+      })
+    );
+
+    render(
+      <Theme>
+        <AuthProvider>
+          <Router>
+            <Login />
+          </Router>
+        </AuthProvider>
+      </Theme>
+    );
+    const emailInput = screen.getByLabelText('E-mail');
+    await userEvent.type(emailInput, dataCredentials.email);
+
+    const passwordInput = screen.getByLabelText('Senha');
+    await userEvent.type(passwordInput, dataCredentials.password);
+
+    expect(emailInput.value).toBe(dataCredentials.email);
+    expect(passwordInput.value).toBe(dataCredentials.password);
+
+    const formButton = screen.getByRole('button');
+    await userEvent.click(formButton);
+
+    expect(formButton).toBeDisabled();
+    await waitFor(() =>
+      expect(axios.get).toHaveBeenCalledWith('http://localhost:9901/login', {
+        auth: {
+          password: dataCredentials.password,
+          username: dataCredentials.email,
+        },
+      })
+    );
+  });
 });

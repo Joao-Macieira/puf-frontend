@@ -23,6 +23,7 @@ export const Form = ({ onSubmit }) => {
     isSubmitting,
     errors,
     touched,
+    isValid,
     handleChange,
     handleSubmit,
     handleBlur,
@@ -62,7 +63,7 @@ export const Form = ({ onSubmit }) => {
         onBlur={handleBlur}
       />
       <Box flexbox="column" center>
-        <Button loading={isSubmitting} mb={4} type="submit">
+        <Button loading={isSubmitting} mb={4} disabled={!isValid} type="submit">
           Entrar
         </Button>
         <Box fontSize={1} color="gray">
